@@ -41,7 +41,10 @@ uploadArchives {
                packaging 'jar'
                description 'Utilities classes we use through various projects'
                url 'https://github.com/SifionSolution/ssolution-commons'
-
+			   organization {
+			       name 'Sifion Solution'
+				   url 'http://www.sifionsolution.com'
+			   }
                scm {
                    url 'scm:git@github.com:SifionSolution/ssolution-commons.git'
                    connection 'scm:git@github.com:SifionSolution/ssolution-commons.git'
