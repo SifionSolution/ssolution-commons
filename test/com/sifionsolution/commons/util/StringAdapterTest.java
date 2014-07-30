@@ -1,32 +1,36 @@
 package com.sifionsolution.commons.util;
 
+import static com.sifionsolution.commons.util.StringAdapter.trimCapitalize;
+import static com.sifionsolution.commons.util.StringAdapter.trimLowerCase;
+import static com.sifionsolution.commons.util.StringAdapter.trimUpperCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
 
 public class StringAdapterTest {
 
-	// public static String trimCapitalize(String value) {
-	// if (isEmpty(value))
-	// return value;
-	//
-	// value = value.trim();
-	//
-	// return value.substring(0, 1).toUpperCase() +
-	// value.substring(1).toLowerCase();
-	// }
-	//
-	// public static String trimUpperCase(String value) {
-	// if (isEmpty(value))
-	// return value;
-	//
-	// return value.toUpperCase().trim();
-	// }
-	//
-	// public static String trimLowerCase(String value) {
-	// if (isEmpty(value))
-	// return value;
-	//
-	// return value.toLowerCase().trim();
-	// }
-	//
+	@Test
+	public void trimTest() {
+		assertEquals("", trimCapitalize(""));
+		assertNull(trimCapitalize(null));
+		assertEquals("Test here", trimCapitalize("test here"));
+		assertEquals("Test here", trimCapitalize("             test here  "));
+		assertEquals("Test", trimCapitalize("test"));
+
+		assertEquals("", trimUpperCase(""));
+		assertNull(trimUpperCase(null));
+		assertEquals("TEST HERE", trimUpperCase("test here"));
+		assertEquals("TEST HERE", trimUpperCase("             test here  "));
+		assertEquals("TEST", trimUpperCase("test"));
+
+		assertEquals("", trimLowerCase(""));
+		assertNull(trimLowerCase(null));
+		assertEquals("test here", trimLowerCase("TEST HERE"));
+		assertEquals("test here", trimLowerCase("             TEST HERE  "));
+		assertEquals("test", trimLowerCase("test"));
+	}
+
 	// public static String getValid(String value) {
 	// if (notEmpty(value))
 	// return value;
