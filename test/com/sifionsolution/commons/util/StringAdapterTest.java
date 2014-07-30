@@ -1,9 +1,14 @@
 package com.sifionsolution.commons.util;
 
+import static com.sifionsolution.commons.util.StringAdapter.getValid;
+import static com.sifionsolution.commons.util.StringAdapter.getValidCapitalize;
+import static com.sifionsolution.commons.util.StringAdapter.getValidLowerCase;
+import static com.sifionsolution.commons.util.StringAdapter.getValidUpperCase;
 import static com.sifionsolution.commons.util.StringAdapter.trimCapitalize;
 import static com.sifionsolution.commons.util.StringAdapter.trimLowerCase;
 import static com.sifionsolution.commons.util.StringAdapter.trimUpperCase;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
@@ -31,22 +36,15 @@ public class StringAdapterTest {
 		assertEquals("test", trimLowerCase("test"));
 	}
 
-	// public static String getValid(String value) {
-	// if (notEmpty(value))
-	// return value;
-	//
-	// return "";
-	// }
-	//
-	// public static String getValidLowerCase(String value) {
-	// return getValid(trimLowerCase(value));
-	// }
-	//
-	// public static String getValidUpperCase(String value) {
-	// return getValid(trimUpperCase(value));
-	// }
-	//
-	// public static String getValidCapitalize(String value) {
-	// return getValid(trimCapitalize(value));
-	// }
+	@Test
+	public void getValidTest() {
+		assertNotNull(getValid(null));
+		assertEquals("test", getValid("test"));
+		assertEquals("", getValid(""));
+
+		assertNotNull(getValidCapitalize(null));
+		assertNotNull(getValidLowerCase(null));
+		assertNotNull(getValidUpperCase(null));
+	}
+
 }
