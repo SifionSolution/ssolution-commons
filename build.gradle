@@ -64,10 +64,14 @@ uploadArchives {
                    developer {
                        id 'mtnoronha'
                        name 'Marco Noronha'
+                       organization  'Sifion Solution'
+                       organizationUrl 'http://www.sifionsolution.com'
                    }
                    developer {
                        id 'rafaelGuerreiro'
                        name 'Rafael Guerreiro'
+                       organization  'Sifion Solution'
+                       organizationUrl 'http://www.sifionsolution.com'
                    }
                }
            }
