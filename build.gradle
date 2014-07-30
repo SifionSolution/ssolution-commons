@@ -1,11 +1,75 @@
-apply plugin: "java"
-apply plugin: "eclipse"
-apply plugin: "maven"
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 apply from: "https://raw.githubusercontent.com/SifionSolution/rootGradle/master/root.gradle"
 
-group = "commons"
+group = "com.sifionsolution.commons"
 version = "1.0"
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+              authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+               name 'ssolution-commons'
+               packaging 'jar'
+               description 'Utilities classes we use through various projects'
+               url 'https://github.com/SifionSolution/ssolution-commons'
+
+               scm {
+                   url 'scm:git@github.com:SifionSolution/ssolution-commons.git'
+                   connection 'scm:git@github.com:SifionSolution/ssolution-commons.git'
+                   developerConnection 'scm:git@github.com:SifionSolution/ssolution-commons.git'
+               }
+
+               licenses {
+                   license {
+                       name 'The Apache Software License, Version 2.0'
+                       url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                       distribution 'repo'
+                   }
+               }
+
+               developers {
+                   developer {
+                       id 'mtnoronha'
+                       name 'Marco Noronha'
+                   }
+                   developer {
+                       id 'rafaelGuerreiro'
+                       name 'Rafael Guerreiro'
+                   }
+               }
+           }
+        }
+    }
+}
 
 
 repositories {
