@@ -3,8 +3,13 @@ apply plugin: 'signing'
 
 apply from: "https://raw.githubusercontent.com/SifionSolution/rootGradle/master/root.gradle"
 
-group = "com.sifionsolution.commons"
+group = "com.sifionsolution"
+archivesBaseName = "ssolution-commons"
 version = "1.0"
+
+signing {
+    sign configurations.archives
+}
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -18,13 +23,8 @@ task sourcesJar(type: Jar) {
 
 artifacts {
     archives jar
-
     archives javadocJar
     archives sourcesJar
-}
-
-signing {
-    sign configurations.archives
 }
 
 uploadArchives {
