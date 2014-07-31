@@ -1,7 +1,6 @@
 package com.sifionsolution.commons;
 
 import static com.sifionsolution.commons.ContentVerifyer.isEmpty;
-import static com.sifionsolution.commons.ContentVerifyer.notEmpty;
 
 public class StringAdapter {
 
@@ -32,10 +31,7 @@ public class StringAdapter {
 	}
 
 	public static String getNullSafe(String value) {
-		if (notEmpty(value))
-			return value;
-
-		return "";
+		return getNullSafe(value);
 	}
 
 	public static String getNullSafeLowerCase(String value) {
