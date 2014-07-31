@@ -13,6 +13,7 @@ public class CharSequenceAdapterTest {
 		assertNotNull(getNullSafe(null));
 		assertEquals("test", getNullSafe("test"));
 		assertEquals("", getNullSafe(""));
+		assertEquals(" ", getNullSafe(" "));
 		assertEquals("", getNullSafe(new StringBuilder()));
 	}
 }

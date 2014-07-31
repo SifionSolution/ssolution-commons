@@ -41,6 +41,7 @@ public class StringAdapterTest {
 		assertNotNull(getNullSafe(null));
 		assertEquals("test", getNullSafe("test"));
 		assertEquals("", getNullSafe(""));
+		assertEquals(" ", getNullSafe(" "));
 
 		assertNotNull(getNullSafeCapitalize(null));
 		assertNotNull(getNullSafeLowerCase(null));

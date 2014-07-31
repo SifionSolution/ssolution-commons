@@ -35,13 +35,6 @@ public class ContentVerifyer {
 		return true;
 	}
 
-	public static boolean notEmpty(CharSequence seq) {
-		if (seq == null || isEmpty(seq.toString()))
-			return false;
-
-		return true;
-	}
-
 	public static boolean isEmpty(Map<?, ?> map) {
 		return !notEmpty(map);
 	}
@@ -56,9 +49,5 @@ public class ContentVerifyer {
 
 	public static boolean isEmpty(String str) {
 		return !notEmpty(str);
-	}
-
-	public static boolean isEmpty(CharSequence seq) {
-		return !notEmpty(seq);
 	}
 }

@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import com.sifionsolution.commons.joiner.function.JoinerFunction;
 
-public final class Joiner<T> implements Iterable<T> {
+public final class Joiner<T> implements Iterable<T>, Cloneable {
 	private Collection<T> c;
 
 	private CharSequence before = "";
@@ -87,6 +87,22 @@ public final class Joiner<T> implements Iterable<T> {
 		return "Joiner " + join(", ", "[", "]");
 	}
 
+	@Override
+	public Iterator<T> iterator() {
+		return c.iterator();
+	}
+
+	@Override
+	public Joiner<T> clone() {
+		Joiner<T> j = new Joiner<T>(c);
+
+		j.after = after;
+		j.before = before;
+		j.fn = fn;
+
+		return j;
+	}
+
 	public String join(CharSequence delimiter) {
 		return join(delimiter, "", "");
 	}
@@ -135,6 +151,13 @@ public final class Joiner<T> implements Iterable<T> {
 		return this;
 	}
 
+	public Joiner<T> addUnique(T e) {
+		if (!contains(e))
+			c.add(e);
+
+		return this;
+	}
+
 	public Joiner<T> addAll(Collection<T> es) {
 		c.addAll(es);
 		return this;
@@ -165,10 +188,5 @@ public final class Joiner<T> implements Iterable<T> {
 	public Joiner<T> clear() {
 		c.clear();
 		return this;
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		return c.iterator();
 	}
 }
