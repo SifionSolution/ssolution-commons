@@ -4,11 +4,13 @@ import static com.sifionsolution.commons.CharSequenceAdapter.getNullSafe;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import com.sifionsolution.commons.joiner.function.JoinerFunction;
 
-public final class Joiner<T> {
+public final class Joiner<T> implements Iterable<T> {
 	private Collection<T> c;
 
 	private CharSequence before = "";
@@ -21,6 +23,10 @@ public final class Joiner<T> {
 		}
 	};
 
+	public Joiner() {
+		this(new ArrayList<T>());
+	}
+
 	private Joiner(Collection<T> c) {
 		this.c = c;
 	}
@@ -29,7 +35,7 @@ public final class Joiner<T> {
 		if (c == null)
 			throw new NullPointerException("The array cannot be null. It can be empty, but not null.");
 
-		return new Joiner<E>(asList(c));
+		return new Joiner<E>(new ArrayList<E>(asList(c)));
 	}
 
 	public static <E extends Object> Joiner<E> from(Collection<E> c) {
@@ -37,6 +43,48 @@ public final class Joiner<T> {
 			throw new NullPointerException("The collection cannot be null. It can be empty, but not null.");
 
 		return new Joiner<E>(c);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((after == null) ? 0 : after.hashCode());
+		result = prime * result + ((before == null) ? 0 : before.hashCode());
+		result = prime * result + ((c == null) ? 0 : c.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Joiner other = (Joiner) obj;
+		if (after == null) {
+			if (other.after != null)
+				return false;
+		} else if (!after.equals(other.after))
+			return false;
+		if (before == null) {
+			if (other.before != null)
+				return false;
+		} else if (!before.equals(other.before))
+			return false;
+		if (c == null) {
+			if (other.c != null)
+				return false;
+		} else if (!c.equals(other.c))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Joiner " + join(", ", "[", "]");
 	}
 
 	public String join(CharSequence delimiter) {
@@ -80,5 +128,47 @@ public final class Joiner<T> {
 
 	public Joiner<T> surroundEachElementWith(CharSequence s) {
 		return addBeforeEachElement(s).addAfterEachElement(s);
+	}
+
+	public Joiner<T> add(T e) {
+		c.add(e);
+		return this;
+	}
+
+	public Joiner<T> addAll(Collection<T> es) {
+		c.addAll(es);
+		return this;
+	}
+
+	public boolean isEmpty() {
+		return c.isEmpty();
+	}
+
+	public boolean contains(T o) {
+		return c.contains(o);
+	}
+
+	public Joiner<T> remove(T o) {
+		c.remove(o);
+		return this;
+	}
+
+	public boolean containsAll(Collection<T> c) {
+		return c.containsAll(c);
+	}
+
+	public Joiner<T> removeAll(Collection<T> c) {
+		c.removeAll(c);
+		return this;
+	}
+
+	public Joiner<T> clear() {
+		c.clear();
+		return this;
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return c.iterator();
 	}
 }
