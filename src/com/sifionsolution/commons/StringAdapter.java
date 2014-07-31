@@ -31,7 +31,7 @@ public class StringAdapter {
 	}
 
 	public static String getNullSafe(String value) {
-		return getNullSafe(value);
+		return CharSequenceAdapter.getNullSafe(value);
 	}
 
 	public static String getNullSafeLowerCase(String value) {
