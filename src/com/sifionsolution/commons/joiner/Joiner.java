@@ -15,7 +15,7 @@ public class Joiner<T> {
 
 	private JoinerFunction<T> fn = new JoinerFunction<T>() {
 		@Override
-		public String apply(T t) {
+		public CharSequence apply(T t) {
 			return valueOf(t);
 		}
 	};
