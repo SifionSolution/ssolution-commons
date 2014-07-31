@@ -1,5 +1,6 @@
 package com.sifionsolution.commons.joiner;
 
+import static com.sifionsolution.commons.CharSequenceAdapter.getNullSafe;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
@@ -7,7 +8,7 @@ import java.util.Collection;
 
 import com.sifionsolution.commons.joiner.function.JoinerFunction;
 
-public class Joiner<T> {
+public final class Joiner<T> {
 	private Collection<T> c;
 
 	private CharSequence before = "";
@@ -79,12 +80,5 @@ public class Joiner<T> {
 
 	public Joiner<T> surroundEachElementWith(CharSequence s) {
 		return addBeforeEachElement(s).addAfterEachElement(s);
-	}
-
-	private CharSequence getNullSafe(CharSequence cs) {
-		if (cs == null)
-			return "";
-
-		return cs;
 	}
 }
