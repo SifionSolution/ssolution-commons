@@ -1,12 +1,12 @@
-package com.sifionsolution.commons.util;
+package com.sifionsolution.commons;
 
-import static com.sifionsolution.commons.util.StringAdapter.getValid;
-import static com.sifionsolution.commons.util.StringAdapter.getValidCapitalize;
-import static com.sifionsolution.commons.util.StringAdapter.getValidLowerCase;
-import static com.sifionsolution.commons.util.StringAdapter.getValidUpperCase;
-import static com.sifionsolution.commons.util.StringAdapter.trimCapitalize;
-import static com.sifionsolution.commons.util.StringAdapter.trimLowerCase;
-import static com.sifionsolution.commons.util.StringAdapter.trimUpperCase;
+import static com.sifionsolution.commons.StringAdapter.getValid;
+import static com.sifionsolution.commons.StringAdapter.getValidCapitalize;
+import static com.sifionsolution.commons.StringAdapter.getValidLowerCase;
+import static com.sifionsolution.commons.StringAdapter.getValidUpperCase;
+import static com.sifionsolution.commons.StringAdapter.trimCapitalize;
+import static com.sifionsolution.commons.StringAdapter.trimLowerCase;
+import static com.sifionsolution.commons.StringAdapter.trimUpperCase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

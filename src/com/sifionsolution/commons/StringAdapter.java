@@ -1,7 +1,7 @@
-package com.sifionsolution.commons.util;
+package com.sifionsolution.commons;
 
-import static com.sifionsolution.commons.util.ContentVerifyer.isEmpty;
-import static com.sifionsolution.commons.util.ContentVerifyer.notEmpty;
+import static com.sifionsolution.commons.ContentVerifyer.isEmpty;
+import static com.sifionsolution.commons.ContentVerifyer.notEmpty;
 
 public class StringAdapter {
 

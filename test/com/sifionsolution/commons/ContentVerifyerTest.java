@@ -1,4 +1,4 @@
-package com.sifionsolution.commons.util;
+package com.sifionsolution.commons;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+
+import com.sifionsolution.commons.ContentVerifyer;
 
 public class ContentVerifyerTest {
 
