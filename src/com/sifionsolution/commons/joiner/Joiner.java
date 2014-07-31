@@ -43,9 +43,9 @@ public class Joiner<T> {
 	}
 
 	public String join(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {
-		delimiter = getValid(delimiter);
-		prefix = getValid(prefix);
-		suffix = getValid(suffix);
+		delimiter = getNullSafe(delimiter);
+		prefix = getNullSafe(prefix);
+		suffix = getNullSafe(suffix);
 
 		StringBuilder sb = new StringBuilder(prefix);
 
@@ -68,12 +68,12 @@ public class Joiner<T> {
 	}
 
 	public Joiner<T> addBeforeEachElement(CharSequence before) {
-		this.before = getValid(before);
+		this.before = getNullSafe(before);
 		return this;
 	}
 
 	public Joiner<T> addAfterEachElement(CharSequence after) {
-		this.after = getValid(after);
+		this.after = getNullSafe(after);
 		return this;
 	}
 
@@ -81,7 +81,7 @@ public class Joiner<T> {
 		return addBeforeEachElement(s).addAfterEachElement(s);
 	}
 
-	private CharSequence getValid(CharSequence cs) {
+	private CharSequence getNullSafe(CharSequence cs) {
 		if (cs == null)
 			return "";
 
