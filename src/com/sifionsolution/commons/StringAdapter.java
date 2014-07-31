@@ -31,22 +31,22 @@ public class StringAdapter {
 		return value.toLowerCase().trim();
 	}
 
-	public static String getValid(String value) {
+	public static String getNullSafe(String value) {
 		if (notEmpty(value))
 			return value;
 
 		return "";
 	}
 
-	public static String getValidLowerCase(String value) {
-		return getValid(trimLowerCase(value));
+	public static String getNullSafeLowerCase(String value) {
+		return getNullSafe(trimLowerCase(value));
 	}
 
-	public static String getValidUpperCase(String value) {
-		return getValid(trimUpperCase(value));
+	public static String getNullSafeUpperCase(String value) {
+		return getNullSafe(trimUpperCase(value));
 	}
 
-	public static String getValidCapitalize(String value) {
-		return getValid(trimCapitalize(value));
+	public static String getNullSafeCapitalize(String value) {
+		return getNullSafe(trimCapitalize(value));
 	}
 }
