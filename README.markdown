@@ -143,7 +143,7 @@ Easy way to check whether or not a String, a collection, a map or an array is em
 * notEmpty(Collection<?> collection)
 * notEmpty(Object[] objs)
 * notEmpty(String str) 
-* Same varsions of the methods above for "isEmpty"
+* isEmpty methods (same parameters as above)
 
 More tests to demonstrate how this works:
 
