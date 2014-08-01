@@ -32,7 +32,7 @@ Fast and easy way to Join a Collection of your elements into a costumizable Stri
 
 #### Basic usage 
 
-```Java
+```java
 String joined = Joiner.from(yourCollections).join("separator");
 
 //Example
@@ -44,7 +44,7 @@ String joined = Joiner.from(owners).join(", ");
 
 ##### Suffix and Preffix
 
-```Java
+```java
 String joined = Joiner.from(yourCollections).join("separator", "preffix", "suffix");
 
 //Example
@@ -64,7 +64,7 @@ String joined = Joiner.from(owners).addBeforeEachElement(":").addAfterEachElemen
 ```
 
 ##### Surround each Element
-```
+```java
 String joined = Joiner.from(owners).surroundEachElementWith("'").join(", ");
 
 // Output:
