@@ -1,7 +1,6 @@
 package com.sifionsolution.commons.joiner;
 
 import static com.sifionsolution.commons.CharSequenceAdapter.getNullSafe;
-import static com.sifionsolution.commons.ContentVerifyer.notEmpty;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.sifionsolution.commons.ContentVerifyer;
 import com.sifionsolution.commons.joiner.function.JoinerFunction;
 
 public final class Joiner<T> implements Iterable<T>, Cloneable {
@@ -17,7 +17,8 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 	private CharSequence before = "";
 	private CharSequence after = "";
 
-	private boolean doNotAppendEmpty = false;
+	private boolean allowEmpties = true;
+	private boolean allowNulls = true;
 
 	private JoinerFunction<T> fn = new JoinerFunction<T>() {
 		@Override
@@ -121,13 +122,25 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 
 		for (T o : c) {
 			CharSequence toApply = fn.apply(o);
-			if (!doNotAppendEmpty || notEmpty(getNullSafe(toApply))) {
+			if (isEntryAllowed(toApply)) {
 				sb.append(separator).append(before).append(toApply).append(after);
 				separator = delimiter;
 			}
 		}
 
 		return sb.append(suffix).toString();
+	}
+
+	private boolean isEntryAllowed(CharSequence toApply) {
+		if (!allowNulls && (toApply == null || "null".equals(toApply))) {
+			return false;
+		}
+
+		if (!allowEmpties && ContentVerifyer.isEmpty(getNullSafe(toApply))) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public Joiner<T> map(JoinerFunction<T> fn) {
@@ -152,8 +165,13 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 		return addBeforeEachElement(s).addAfterEachElement(s);
 	}
 
-	public Joiner<T> doNotAppendEmpty() {
-		doNotAppendEmpty = true;
+	public Joiner<T> noEmpties() {
+		allowEmpties = false;
+		return this;
+	}
+
+	public Joiner<T> noNulls() {
+		allowNulls = false;
 		return this;
 	}
 

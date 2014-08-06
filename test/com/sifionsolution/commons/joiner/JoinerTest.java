@@ -3,7 +3,6 @@ package com.sifionsolution.commons.joiner;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -224,7 +223,7 @@ public class JoinerTest {
 
 		Joiner<Person> j2 = j1.clone().surroundEachElementWith("\"");
 
-		assertNotEquals(j1, j2);
+		assertFalse(j1.equals(j2));
 
 		j2 = j2.surroundEachElementWith("'");
 
@@ -262,8 +261,8 @@ public class JoinerTest {
 
 		Joiner<Person> joiner = Joiner.from(rafael, marco);
 
-		joiner.addUnique(new Person("Rafael", "Guerreiro")).surroundEachElementWith("'").map(
-				new JoinerFunction<Person>() {
+		joiner.addUnique(new Person("Rafael", "Guerreiro")).surroundEachElementWith("'")
+				.map(new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						return t.getFullName();
@@ -278,8 +277,8 @@ public class JoinerTest {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 
-		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'").map(
-				new JoinerFunction<Person>() {
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
+				.map(new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						return t.getFullName();
@@ -294,8 +293,8 @@ public class JoinerTest {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 
-		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'").map(
-				new JoinerFunction<Person>() {
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
+				.map(new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						if (t == null)
@@ -303,8 +302,36 @@ public class JoinerTest {
 
 						return t.getFullName();
 					}
-				}).doNotAppendEmpty();
+				}).noEmpties();
 
 		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
 	}
+
+	@Test
+	public void doNotAppendNullShouldBlockNullEntries() {
+		Person rafael = new Person("Rafael", "Guerreiro");
+		Person marco = new Person("Marco", "Noronha");
+
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
+				.map(new JoinerFunction<Person>() {
+					@Override
+					public String apply(Person t) {
+						if (t == null)
+							return null;
+
+						return t.getFullName();
+					}
+				}).noEmpties();
+
+		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
+	}
+
+	@Test
+	public void shouldBlockNullAndEmptyEntriesWhenBothConfigurationsAreActive() {
+		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
+				.surroundEachElementWith("'").noEmpties().noNulls();
+
+		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
+	}
+
 }
