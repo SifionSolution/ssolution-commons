@@ -12,14 +12,14 @@ Utilities classes we use through various projects
 <dependency>
     <groupId>com.sifionsolution</groupId>
     <artifactId>ssolution-commons</artifactId>
-    <version>1.0</version> <!-- Check for the latest version -->
+    <version>1.1</version> <!-- Check for the latest version -->
 </dependency>
 ```
 
 * Or ... try it out Gradle: 
 
 ```gradle
-compile 'com.sifionsolution:ssolution-commons:1.0' //Check for the latest version
+compile 'com.sifionsolution:ssolution-commons:1.1' //Check for the latest version
 ```
 
 
