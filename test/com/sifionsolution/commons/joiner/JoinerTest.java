@@ -261,8 +261,8 @@ public class JoinerTest {
 
 		Joiner<Person> joiner = Joiner.from(rafael, marco);
 
-		joiner.addUnique(new Person("Rafael", "Guerreiro")).surroundEachElementWith("'")
-				.map(new JoinerFunction<Person>() {
+		joiner.addUnique(new Person("Rafael", "Guerreiro")).surroundEachElementWith("'").map(
+				new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						return t.getFullName();
@@ -273,28 +273,29 @@ public class JoinerTest {
 	}
 
 	@Test
-	public void removeNullShouldRemoveAllNullObjects() {
+	public void withoutNullsShouldRemoveAllNullObjects() {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 
-		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
-				.map(new JoinerFunction<Person>() {
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).withoutNulls().add(null)
+				.surroundEachElementWith("'").map(new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						return t.getFullName();
 					}
-				}).removeNull();
+				});
 
 		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
 	}
 
 	@Test
-	public void doNotAppendEmptyShouldBlockEmptyEntries() {
+	public void withoutEmptiesShouldBlockEmptyEntries() {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
+		Person empty = new Person("", "");
 
-		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
-				.map(new JoinerFunction<Person>() {
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null, empty).surroundEachElementWith("'").map(
+				new JoinerFunction<Person>() {
 					@Override
 					public String apply(Person t) {
 						if (t == null)
@@ -302,26 +303,7 @@ public class JoinerTest {
 
 						return t.getFullName();
 					}
-				}).noEmpties();
-
-		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
-	}
-
-	@Test
-	public void doNotAppendNullShouldBlockNullEntries() {
-		Person rafael = new Person("Rafael", "Guerreiro");
-		Person marco = new Person("Marco", "Noronha");
-
-		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'")
-				.map(new JoinerFunction<Person>() {
-					@Override
-					public String apply(Person t) {
-						if (t == null)
-							return null;
-
-						return t.getFullName();
-					}
-				}).noEmpties();
+				}).withoutEmpties();
 
 		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
 	}
@@ -329,9 +311,33 @@ public class JoinerTest {
 	@Test
 	public void shouldBlockNullAndEmptyEntriesWhenBothConfigurationsAreActive() {
 		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
-				.surroundEachElementWith("'").noEmpties().noNulls();
+				.surroundEachElementWith("'").withoutEmpties().withoutNulls();
 
 		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
+	}
+
+	@Test
+	public void whenWithoutNullsShouldAllowEmpties() {
+		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
+				.surroundEachElementWith("'").withoutNulls();
+
+		assertEquals("'Rafael Guerreiro', '', 'Marco Noronha', ''", joiner.join(", "));
+	}
+
+	@Test
+	public void whenWithoutEmptiesShouldAllowNulls() {
+		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
+				.surroundEachElementWith("'").withoutEmpties();
+
+		assertEquals("'Rafael Guerreiro', 'null', 'Marco Noronha', 'null'", joiner.join(", "));
+	}
+
+	@Test
+	public void nullAsStringIsValidAndShouldBeAppended() {
+		Joiner<String> joiner = Joiner.from("null", null, "", "Marco Noronha", null, "").surroundEachElementWith("'")
+				.withoutNulls().withoutEmpties();
+
+		assertEquals("'null', 'Marco Noronha'", joiner.join(", "));
 	}
 
 }

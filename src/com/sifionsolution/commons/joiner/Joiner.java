@@ -1,6 +1,7 @@
 package com.sifionsolution.commons.joiner;
 
 import static com.sifionsolution.commons.CharSequenceAdapter.getNullSafe;
+import static com.sifionsolution.commons.ContentVerifyer.notEmpty;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.sifionsolution.commons.ContentVerifyer;
 import com.sifionsolution.commons.joiner.function.JoinerFunction;
 
 public final class Joiner<T> implements Iterable<T>, Cloneable {
@@ -121,26 +121,25 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 		CharSequence separator = "";
 
 		for (T o : c) {
-			CharSequence toApply = fn.apply(o);
-			if (isEntryAllowed(toApply)) {
-				sb.append(separator).append(before).append(toApply).append(after);
-				separator = delimiter;
+			if (isNullAllowed(o)) {
+				CharSequence toApply = fn.apply(o);
+
+				if (isEmptyAllowed(toApply)) {
+					sb.append(separator).append(before).append(toApply).append(after);
+					separator = delimiter;
+				}
 			}
 		}
 
 		return sb.append(suffix).toString();
 	}
 
-	private boolean isEntryAllowed(CharSequence toApply) {
-		if (!allowNulls && (toApply == null || "null".equals(toApply))) {
-			return false;
-		}
+	private boolean isNullAllowed(T o) {
+		return allowNulls || o != null;
+	}
 
-		if (!allowEmpties && ContentVerifyer.isEmpty(getNullSafe(toApply))) {
-			return false;
-		}
-
-		return true;
+	private boolean isEmptyAllowed(CharSequence toApply) {
+		return allowEmpties || notEmpty(getNullSafe(toApply));
 	}
 
 	public Joiner<T> map(JoinerFunction<T> fn) {
@@ -165,12 +164,12 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 		return addBeforeEachElement(s).addAfterEachElement(s);
 	}
 
-	public Joiner<T> noEmpties() {
+	public Joiner<T> withoutEmpties() {
 		allowEmpties = false;
 		return this;
 	}
 
-	public Joiner<T> noNulls() {
+	public Joiner<T> withoutNulls() {
 		allowNulls = false;
 		return this;
 	}
@@ -198,19 +197,6 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 
 	public boolean contains(T o) {
 		return c.contains(o);
-	}
-
-	public Joiner<T> removeNull() {
-		Iterator<T> iterator = iterator();
-
-		while (iterator.hasNext()) {
-			T o = iterator.next();
-
-			if (o == null)
-				iterator.remove();
-		}
-
-		return this;
 	}
 
 	public Joiner<T> remove(T o) {
