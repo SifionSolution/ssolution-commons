@@ -1,6 +1,7 @@
 package com.sifionsolution.commons.joiner;
 
 import static com.sifionsolution.commons.CharSequenceAdapter.getNullSafe;
+import static com.sifionsolution.commons.ContentVerifyer.notEmpty;
 import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 
@@ -15,6 +16,8 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 
 	private CharSequence before = "";
 	private CharSequence after = "";
+
+	private boolean doNotAppendEmpty = false;
 
 	private JoinerFunction<T> fn = new JoinerFunction<T>() {
 		@Override
@@ -117,8 +120,11 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 		CharSequence separator = "";
 
 		for (T o : c) {
-			sb.append(separator).append(before).append(fn.apply(o)).append(after);
-			separator = delimiter;
+			CharSequence toApply = fn.apply(o);
+			if (!doNotAppendEmpty || notEmpty(getNullSafe(toApply))) {
+				sb.append(separator).append(before).append(toApply).append(after);
+				separator = delimiter;
+			}
 		}
 
 		return sb.append(suffix).toString();
@@ -146,6 +152,11 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 		return addBeforeEachElement(s).addAfterEachElement(s);
 	}
 
+	public Joiner<T> doNotAppendEmpty() {
+		doNotAppendEmpty = true;
+		return this;
+	}
+
 	public Joiner<T> add(T e) {
 		c.add(e);
 		return this;
@@ -169,6 +180,19 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 
 	public boolean contains(T o) {
 		return c.contains(o);
+	}
+
+	public Joiner<T> removeNull() {
+		Iterator<T> iterator = iterator();
+
+		while (iterator.hasNext()) {
+			T o = iterator.next();
+
+			if (o == null)
+				iterator.remove();
+		}
+
+		return this;
 	}
 
 	public Joiner<T> remove(T o) {

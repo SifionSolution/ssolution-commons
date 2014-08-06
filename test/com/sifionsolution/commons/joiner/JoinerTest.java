@@ -272,4 +272,39 @@ public class JoinerTest {
 
 		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
 	}
+
+	@Test
+	public void removeNullShouldRemoveAllNullObjects() {
+		Person rafael = new Person("Rafael", "Guerreiro");
+		Person marco = new Person("Marco", "Noronha");
+
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'").map(
+				new JoinerFunction<Person>() {
+					@Override
+					public String apply(Person t) {
+						return t.getFullName();
+					}
+				}).removeNull();
+
+		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
+	}
+
+	@Test
+	public void doNotAppendEmptyShouldBlockEmptyEntries() {
+		Person rafael = new Person("Rafael", "Guerreiro");
+		Person marco = new Person("Marco", "Noronha");
+
+		Joiner<Person> joiner = Joiner.from(rafael, null, marco, null).surroundEachElementWith("'").map(
+				new JoinerFunction<Person>() {
+					@Override
+					public String apply(Person t) {
+						if (t == null)
+							return "";
+
+						return t.getFullName();
+					}
+				}).doNotAppendEmpty();
+
+		assertEquals("'Rafael Guerreiro', 'Marco Noronha'", joiner.join(", "));
+	}
 }
