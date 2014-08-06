@@ -1,5 +1,4 @@
-package com.sifionsolution.commons.util;
-
+package com.sifionsolution.commons;
 
 import java.util.Collection;
 import java.util.Map;
