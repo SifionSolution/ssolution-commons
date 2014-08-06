@@ -12,6 +12,21 @@ signing {
     sign configurations.archives
 }
 
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+	}
+	test { 
+		java {
+			srcDir 'test'
+		}
+	}
+	
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from 'build/docs/javadoc'
