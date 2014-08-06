@@ -106,6 +106,49 @@ String joined = Joiner.from(owners).map(new JoinerFunction<Person>() {
 // Rafael Guerreiro, Marco Noronha
 ```
 
+##### No nulls
+
+If you dont want null elements on your list, just call `withoutNulls()`:
+
+```java
+Person rafael = new Person("Rafael", "Guerreiro");
+Person marco = new Person("Marco", "Noronha");
+
+List<Person> owners = asList(rafael, null, marco, null, null);
+
+String joined = Joiner.from(owners).map(new JoinerFunction<Person>() {
+			@Override
+			public String apply(Person t) {
+				return t.getFullName(); 
+			}
+		}).withoutNulls().join(", ");
+		
+// Output:
+// Rafael Guerreiro, Marco Noronha
+```
+
+##### No empties
+
+In case you dont want empty strings on your list, call `withoutEmpties`:
+
+```java
+Person rafael = new Person("Rafael", "Guerreiro");
+Person marco = new Person("Marco", "Noronha");
+Person empty = new Person("", "");
+List<Person> owners = asList(rafael, empty, marco, empty, empty);
+
+String joined = Joiner.from(owners).map(new JoinerFunction<Person>() {
+			@Override
+			public String apply(Person t) {
+				return t.getFullName(); 
+			}
+		}).withoutEmpties().join(", ");
+		
+// Output:
+// Rafael Guerreiro, Marco Noronha
+```
+
+
 ##String utilities
 
 These are the possibilities while working with Strings:
