@@ -38,35 +38,34 @@ public class JoinerTest {
 		Person marco = new Person("Marco", "Noronha");
 		Person nullPerson = null;
 
-		List<Person> owners = asList(rafael, nullPerson, marco);
-
-		String joined = Joiner.from(owners).join(", ", "{", "}");
+		String joined = Joiner.from(rafael, nullPerson, marco).allowNulls().join(", ", "{", "}");
 
 		assertEquals("{Rafael, null, Marco}", joined);
 	}
 
 	@Test
-	public void shouldAddBeforeAndAfter() {
+	public void shouldAddBeforeAndAfterWhenAllowNulls() {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 		Person nullPerson = null;
 
 		List<Person> owners = asList(rafael, nullPerson, marco);
 
-		String joined = Joiner.from(owners).addBeforeEachElement(":").addAfterEachElement(";").join(", ", "{", "}");
+		String joined = Joiner.from(owners).allowNulls().addBeforeEachElement(":").addAfterEachElement(";").join(", ",
+				"{", "}");
 
 		assertEquals("{:Rafael;, :null;, :Marco;}", joined);
 	}
 
 	@Test
-	public void shouldSurroundEachElement() {
+	public void shouldSurroundEachElementWhenAllowNulls() {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 		Person nullPerson = null;
 
 		List<Person> owners = asList(rafael, nullPerson, marco);
 
-		String joined = Joiner.from(owners).surroundEachElementWith("'").join(", ", "{", "}");
+		String joined = Joiner.from(owners).surroundEachElementWith("'").allowNulls().join(", ", "{", "}");
 
 		assertEquals("{'Rafael', 'null', 'Marco'}", joined);
 	}
@@ -109,7 +108,7 @@ public class JoinerTest {
 	}
 
 	@Test
-	public void theMapFunctionCanReturnNull() {
+	public void theMapFunctionCanReturnNullWhenAllowNulls() {
 		Person rafael = new Person("Rafael", "Guerreiro");
 		Person marco = new Person("Marco", "Noronha");
 
@@ -120,7 +119,7 @@ public class JoinerTest {
 			public String apply(Person t) {
 				return null;
 			}
-		}).surroundEachElementWith("'").join(", ");
+		}).allowNulls().surroundEachElementWith("'").join(", ");
 
 		assertEquals("'null', 'null'", joined);
 	}
@@ -137,7 +136,7 @@ public class JoinerTest {
 			public String apply(Person t) {
 				return null;
 			}
-		}).surroundEachElementWith(null).join(null, null, null);
+		}).allowNulls().surroundEachElementWith(null).join(null, null, null);
 
 		assertEquals("nullnull", joined);
 	}
@@ -317,17 +316,17 @@ public class JoinerTest {
 	}
 
 	@Test
-	public void whenWithoutNullsShouldAllowEmpties() {
+	public void whenOnlyAllowEmptiesShouldBeWithoutNulls() {
 		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
-				.surroundEachElementWith("'").withoutNulls();
+				.surroundEachElementWith("'").allowEmpties();
 
 		assertEquals("'Rafael Guerreiro', '', 'Marco Noronha', ''", joiner.join(", "));
 	}
 
 	@Test
-	public void whenWithoutEmptiesShouldAllowNulls() {
+	public void whenOnlyAllowNullsShouldBeWithoutEmpties() {
 		Joiner<String> joiner = Joiner.from("Rafael Guerreiro", null, "", "Marco Noronha", null, "")
-				.surroundEachElementWith("'").withoutEmpties();
+				.surroundEachElementWith("'").allowNulls();
 
 		assertEquals("'Rafael Guerreiro', 'null', 'Marco Noronha', 'null'", joiner.join(", "));
 	}

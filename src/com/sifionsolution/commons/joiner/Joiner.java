@@ -17,8 +17,8 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 	private CharSequence before = "";
 	private CharSequence after = "";
 
-	private boolean allowEmpties = true;
-	private boolean allowNulls = true;
+	private boolean allowEmpties = false;
+	private boolean allowNulls = false;
 
 	private JoinerFunction<T> fn = new JoinerFunction<T>() {
 		@Override
@@ -32,6 +32,9 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 	}
 
 	private Joiner(Collection<T> c) {
+		if (c == null)
+			throw new NullPointerException("The collection cannot be null. It can be empty, but not null.");
+
 		this.c = c;
 	}
 
@@ -67,7 +70,7 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Joiner other = (Joiner) obj;
+		Joiner<?> other = (Joiner<?>) obj;
 		if (after == null) {
 			if (other.after != null)
 				return false;
@@ -124,6 +127,9 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 			if (isNullAllowed(o)) {
 				CharSequence toApply = fn.apply(o);
 
+				if (allowNulls && toApply == null)
+					toApply = valueOf(toApply);
+
 				if (isEmptyAllowed(toApply)) {
 					sb.append(separator).append(before).append(toApply).append(after);
 					separator = delimiter;
@@ -171,6 +177,16 @@ public final class Joiner<T> implements Iterable<T>, Cloneable {
 
 	public Joiner<T> withoutNulls() {
 		allowNulls = false;
+		return this;
+	}
+
+	public Joiner<T> allowEmpties() {
+		allowEmpties = true;
+		return this;
+	}
+
+	public Joiner<T> allowNulls() {
+		allowNulls = true;
 		return this;
 	}
 
